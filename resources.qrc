@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Main.qml</file>
+        <file>qml/PhotoCaptureControls.qml</file>
+        <file>qml/ScannerInspector.qml</file>
+        <file>qml/ZoomControl.qml</file>
+        <file>qml/config.json</file>
+    </qresource>
+</RCC>
