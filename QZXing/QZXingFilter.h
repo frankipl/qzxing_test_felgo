@@ -82,11 +82,12 @@ class QZXingFilter : public QAbstractVideoFilter
         void decodingStarted();
         void captureRectChanged();
         void tagFound(QString tag);
-
+        void tagFoundAdvanced(QString tag,QString format,QString charset);
     private slots:
         void handleDecodingStarted();
         void handleDecodingFinished(bool succeeded);
         void handleTagFound(QString tag);
+        void handleTagFoundAdvanced(const QString tag,const QString format,const QString charset);
     private: /// Attributes
         QZXing decoder;
         bool decoding;

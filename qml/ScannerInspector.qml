@@ -19,7 +19,7 @@ Rectangle {
         anchors.top:parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.bottom: imageToDecode.top
+        anchors.bottom: bottomRect.top
         color: "black"
         state: "PhotoCapture"
 
@@ -49,14 +49,14 @@ Rectangle {
             captureMode: Camera.CaptureStillImage
             cameraState: Camera.LoadedState
 
-            imageCapture {
-                onImageCaptured: {
-                    console.log("onImageCaptured")
-                    imageToDecode.source=preview
-                    decoder.decodeImageQML(imageToDecode)
-                   // photoPreview.source = preview  // Show the preview in an Image
-                }
-            }
+//            imageCapture {
+//                onImageCaptured: {
+//                    console.log("onImageCaptured")
+//                    imageToDecode.source=preview
+//                    decoder.decodeImageQML(imageToDecode)
+//                   // photoPreview.source = preview  // Show the preview in an Image
+//                }
+//            }
         }
 
         VideoOutput {
@@ -114,10 +114,9 @@ Rectangle {
             id: zxingFilter
             objectName: "zxingFilter"
 
-
             onDecodingStarted:
             {
-                console.log("decoding started");
+                console.log("QZXingFilter decoding started");
             }
 
             onDecodingFinished:
@@ -131,24 +130,29 @@ Rectangle {
                     console.log("QZXingFilter decode failed");
                 }
             }
-
-            onTagFound:
-            {
-                console.log("--!!--");
-                console.log(tag);
+            onTagFoundAdvanced: {
+                console.log("QZXingFilter onTagFoundAdvanced tag:"+tag+" format:"+format+" charset:"+charset)
                 scannerDecoded(tag);
                 decoded_text=tag
             }
+
+//            onTagFound:
+//            {
+//                console.log("QZXingFilter onTagFound tag:"+tag);
+//                console.log(tag);
+//                scannerDecoded(tag);
+//                decoded_text=tag
+//            }
         }
     }
-    Image{
-        id:imageToDecode
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: bottomRect.top
-        height:parent.height/3
-        fillMode: Image.PreserveAspectFit
-    }
+//    Image{
+//        id:imageToDecode
+//        anchors.left: parent.left
+//        anchors.right: parent.right
+//        anchors.bottom: bottomRect.top
+//        height:parent.height/3
+//        fillMode: Image.PreserveAspectFit
+//    }
     Rectangle {
         id:bottomRect
         anchors.bottom: parent.bottom

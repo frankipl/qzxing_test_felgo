@@ -41,10 +41,10 @@ namespace {
 
 QZXingFilter::QZXingFilter(QObject *parent)
     : QAbstractVideoFilter(parent)
-    , decoder(QZXing::DecoderFormat_QR_CODE)
+    , decoder(QZXing::DecoderFormat_EAN_13)
     , decoding(false)
 {
-    decoder.setDecoder(QZXing::DecoderFormat_QR_CODE | QZXing::DecoderFormat_EAN_13);
+ //   decoder.setDecoder(QZXing::DecoderFormat_QR_CODE);
     /// Connecting signals to handlers that will send signals to QML
     connect(&decoder, &QZXing::decodingStarted,
             this, &QZXingFilter::handleDecodingStarted);
@@ -52,6 +52,7 @@ QZXingFilter::QZXingFilter(QObject *parent)
             this, &QZXingFilter::handleDecodingFinished);
     connect(&decoder,&QZXing::tagFound,
             this, &QZXingFilter::handleTagFound);
+    connect(&decoder,SIGNAL(tagFoundAdvanced(QString,QString,QString)),this,SLOT(handleTagFoundAdvanced(QString,QString,QString)));
 }
 
 QZXingFilter::~QZXingFilter()
@@ -60,12 +61,18 @@ QZXingFilter::~QZXingFilter()
       processThread.cancel();
       processThread.waitForFinished();
     }
+
 }
 void QZXingFilter::handleTagFound(QString tag) {
     emit tagFound(tag);
 }
+void QZXingFilter::handleTagFoundAdvanced(const QString tag, const QString format, const QString charset) {
+    qDebug()<<"QZXingFilter::handleTagFoundAdvanced enabled formats:"<<decoder.getEnabledFormats();
+    emit tagFoundAdvanced(tag,format,charset);
+}
 void QZXingFilter::handleDecodingStarted()
 {
+    qDebug()<<"QZXingFilter::handleDecodingStarted enabled formats:"<<decoder.getEnabledFormats();
     decoding = true;
     emit decodingStarted();
     emit isDecodingChanged();
